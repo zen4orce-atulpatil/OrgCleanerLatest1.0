@@ -79,7 +79,7 @@ public with sharing class ConfigurationCleanUpService {
         triggerParentList.addAll(apexTriggerDetailMap.keySet());
     }
     public void getWorkflows(){
-        workflowDetailMap = WorkflowService.getWorkflows(); 
+        workflowDetailMap = WorkflowService.getMetadataFor('Workflow'); 
     }
     public void getApexClass(){
         apexClassList = ApexClassService.getClasses(); 
@@ -91,12 +91,13 @@ public with sharing class ConfigurationCleanUpService {
     } 
     
     public void getValidationRules(){
-        validationRuleDetailMap = ValidationRuleService.getValidationRules();
+        validationRuleDetailMap = WorkflowService.getMetadataFor('ValidationRule');
     }
     public void getCustomFields(){
         customFieldListMap = CustomFieldService.listOfAllFields();
     }
     public void CleanConfigurations(){ 
+    	
         if(ConfigName == 'Trigger'){
             List<String> triggersToDelete = new List<String>();
             for(String details:ConfigurationList.split(',')){
@@ -114,22 +115,55 @@ public with sharing class ConfigurationCleanUpService {
         }
         else if(ConfigName == 'WorkflowRules'){
             
+            ConfigurationSelector configurationSelectorInstance = new ConfigurationSelector();
+        	string nameSpace = configurationSelectorInstance.nameSpaceprefixOfOrg(); 
             List<String> WorkflowRuleToDelete = new List<String>();
             for(String details:ConfigurationList.split(',')){
-        
-                WorkflowRuleToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+        		        		
+        		if( nameSpace != null ){
+        		
+        			if( details.split('\\$')[0].endsWithIgnoreCase('__c')){
+  						
+  						 WorkflowRuleToDelete.add(nameSpace+'__'+details.split('\\$')[0]+'.'+nameSpace+'__'+details.split('\\$')[2]);
+                	}
+                	else{
+                		
+                		WorkflowRuleToDelete.add(details.split('\\$')[0]+'.'+nameSpace+'__'+details.split('\\$')[2]);
+                	}                
+        		} 
+        		else{
+        			
+        			WorkflowRuleToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+        		}                
             } 
-            system.debug('**************WorkflowRuleToDelete**************'+WorkflowRuleToDelete);
             WorkflowService.deleteWorkflows(WorkflowRuleToDelete);          
-            
+             
         }
         else if(ConfigName == 'ValidationRules'){
+        	
+        	ConfigurationSelector configurationSelectorInstance = new ConfigurationSelector();
+        	string nameSpace = configurationSelectorInstance.nameSpaceprefixOfOrg(); 
             List<String> ValidationRuleToDelete = new List<String>();
             for(String details:ConfigurationList.split(',')){
-                ValidationRuleToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
-            	//ValidationRuleToDelete.add(details.split('\\$')[2]);
+                //ValidationRuleToDelete.add('OrgCleaner__'+details.split('\\$')[0]+'.'+'OrgCleaner__'+details.split('\\$')[2]); 
+            	
+            	if( nameSpace != null ){
+        		
+        			if( details.split('\\$')[0].endsWithIgnoreCase('__c')){
+  						
+  						 ValidationRuleToDelete.add(nameSpace+'__'+details.split('\\$')[0]+'.'+nameSpace+'__'+details.split('\\$')[2]);
+                	}
+                	else{
+                		
+                		ValidationRuleToDelete.add(details.split('\\$')[0]+'.'+nameSpace+'__'+details.split('\\$')[2]);
+                	}                
+        		} 
+        		else{
+        			
+        			ValidationRuleToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+        		}               
             }
-            ValidationRuleService.deleteValidationRules(ValidationRuleToDelete);            
+            WorkflowService.deleteValidationRules(ValidationRuleToDelete);            
             
         }
         else if(ConfigName == 'ApexClass'){
@@ -140,13 +174,30 @@ public with sharing class ConfigurationCleanUpService {
             } 
         }
         else if(ConfigName == 'CustomField')
-        {
+        {	
+        	ConfigurationSelector configurationSelectorInstance = new ConfigurationSelector();
+        	string nameSpace = configurationSelectorInstance.nameSpaceprefixOfOrg(); 
             List<String> customFieldToDelete = new List<String>();
+            
             for(String details:ConfigurationList.split(','))
-            {
-                customFieldToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+            {	
+            	if( nameSpace != null ){
+        		
+        			if( details.split('\\$')[0].endsWithIgnoreCase('__c')){
+  						
+  						 customFieldToDelete.add(nameSpace+'__'+details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+                	}
+                	else{
+                		
+                		customFieldToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+                	}                
+        		} 
+        		else{
+        			
+        			customFieldToDelete.add(details.split('\\$')[0]+'.'+details.split('\\$')[2]);
+        		}        
             }
-            CustomFieldService.DeleteFields(customFieldToDelete);
+            CustomFieldService.deleteFields(customFieldToDelete);
         }
     }
     public void deleteclasses()

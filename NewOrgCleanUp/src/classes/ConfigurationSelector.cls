@@ -332,10 +332,13 @@ public class ConfigurationSelector {
     public string nameSpaceprefixOfOrg() {
         
         String nameSpace;
-        Organization org = [ SELECT NamespacePrefix 
-        					 FROM Organization
-        					 LIMIT 50000 ];
-        nameSpace = String.valueOf(org.NamespacePrefix);
+        List<Organization> org = [ SELECT NamespacePrefix 
+        					 	   FROM Organization
+        					       LIMIT 1 ];
+        if(org.size() > 0){
+        	
+        	nameSpace = String.valueOf(org[0].NamespacePrefix);
+        }
         return nameSpace;
     }
 }

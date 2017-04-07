@@ -35,7 +35,7 @@ public with sharing class ValidationRuleService {
 	                    ValidationRuleName.add(Objectname.substringAfter('.'));
                         ValidationRuleName.add(fileProperty.ID); 
                         ValidationRuleName1.add(ValidationRuleName);
-                        system.debug('v ==>');
+                        system.debug('ValidationRuleName ==>'+ValidationRuleName);
     	            }
         	       	ValidationRuleMap.put(Objectname.substringBefore('.'), ValidationRuleName1); 
                     System.debug('ValidationRuleMap =>'+ValidationRuleMap);

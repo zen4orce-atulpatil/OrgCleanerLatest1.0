@@ -67,6 +67,7 @@ public class ConfigurationCleanUpServiceHandler {
                 gen.writeStringField(CONFIGID, configDetails[1]);
         		gen.writeStringField(NAME, configDetails[0]); 
                 gen = creataChildJsonFromList(gen, ChildCount, count, objectName );
+                system.debug('gen==>'+gen);
                 gen.writeEndObject();
                 ChildCount++;
             }
@@ -340,6 +341,7 @@ public class ConfigurationCleanUpServiceHandler {
         }
         gen.writeEndArray();
         gen.writeEndObject();
+        System.debug('gen==>'+gen.getAsString());
         return gen.getAsString();
     }
 

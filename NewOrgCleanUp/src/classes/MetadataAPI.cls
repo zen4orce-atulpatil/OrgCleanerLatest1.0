@@ -74,9 +74,28 @@ public class MetadataAPI {
     	System.debug('workflowList 1 - ' + workflowList);
         MetadataService.MetadataPort service = createServiceBatch(sessionID);
         System.debug('sessionID- ' + sessionID);
-        List<MetadataService.DeleteResult> results = service.deleteMetadata('WorkflowRule', workflowList);
+        List<MetadataService.DeleteResult> results =  new List<MetadataService.DeleteResult>();
+        try{
+        	system.debug('**************metadata try******************');
+        	results = service.deleteMetadata('WorkflowRule', workflowList);
+        }
+        catch(exception e){
+        	system.debug('**************metadata try******************'+e.getMessage());
+        }
+        for(MetadataService.DeleteResult dr : results) {
+    		/*if (dr.isSuccess()) {
+        		// Operation was successful, so get the ID of the record that was processed
+        		System.debug('Successfully deleted account with ID: ' );
+    		}
+    		else {*/
+        		// Operation failed, so get all errors                
+	        System.debug('Account fields that affected this error: ' + dr);
+    	//}	
+	}
+        
+        
         handleDeleteResults(results[0]);
-        System.debug('results[0] - ' + results[0]);
+        System.debug('results[0] - ' + results[0].fullName);
         return results.size() > 0 ? results[0].success : false;
     }
      //DELETE WORKFLOW RULE
@@ -243,4 +262,20 @@ public class MetadataAPI {
                 new MetadataService.Metadata[] { apexPage });
         handleSaveResults(results[0]);
     } */
+    
+    public class deleteMetadata_element {
+        public String type_x;
+        public String[] fullNames;
+        private String[] type_x_type_info = new String[]{'type','http://soap.sforce.com/2006/04/metadata',null,'1','1','false'};
+        private String[] fullNames_type_info = new String[]{'fullNames','http://soap.sforce.com/2006/04/metadata',null,'0','-1','false'};
+        private String[] apex_schema_type_info = new String[]{'http://soap.sforce.com/2006/04/metadata','true','false'};
+        private String[] field_order_type_info = new String[]{'type_x','fullNames'};
+    }
+    
+    public class deleteMetadataResponse_element {
+        public MetadataService.DeleteResult[] result;
+        private String[] result_type_info = new String[]{'result','http://soap.sforce.com/2006/04/metadata',null,'0','-1','false'};
+        private String[] apex_schema_type_info = new String[]{'http://soap.sforce.com/2006/04/metadata','true','false'};
+        private String[] field_order_type_info = new String[]{'result'};
+    }
 }

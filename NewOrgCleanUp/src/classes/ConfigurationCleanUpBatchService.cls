@@ -48,7 +48,7 @@ global class ConfigurationCleanUpBatchService implements Database.Batchable<Stri
                 mapi.deleteWorkflow(ss,sessionId);
             }
             if(configName == 'ValidationRule'){
-              
+              	system.debug('*****************batch configName**************'+configName);
           		 mapi.deleteValidationRule(ss,sessionId);
             	
             }

@@ -125,18 +125,21 @@
 			}
    		
         j$(document).delegate(".{!typeofConfig}Individualobject", "click", function() {
+            debugger;
   				 var tableRow = j$(this).closest('tr');
                  var selectedData = {!typeofConfig}PreviewTable.row(tableRow).data();
                 loadSelected{!typeofConfig}Table(selectedData.name,this.checked,true);
                 toastr.success(selectedData.name + ' trigger added in Selected Triggers section');
 			});
         j$(document).delegate("#{!typeofConfig}ObjectTable .selective", "click", function() {
+             debugger;
                 var tableRow = j$(this).closest('tr');
                 var selectedData = {!typeofConfig}ObjTable.row(tableRow).data();
                 loadChildTable{!typeofConfig}(selectedData.name);
                 toastr.info(selectedData.name + ' triggers will be displayed in Triggers section');
 			});
         j$(document).delegate("#{!typeofConfig}ObjectTable .object{!typeofConfig}", "click", function() {
+             debugger;
                 var tableRow = j$(this).closest('tr');
                 var isSelected = this.checked;
                 var selectedData = {!typeofConfig}ObjTable.row(tableRow).data();
@@ -154,6 +157,7 @@
               
         	}
         function loadChildTable{!typeofConfig}(objectName){
+             debugger;
                 console.log(objectName);
                 {!typeofConfig}Data = [];
                         for (var i = 0; i < configJsonData{!typeofConfig}.data.length; i++) {
@@ -203,6 +207,7 @@
                               
             }
         function loadSelected{!typeofConfig}Table(objectName,isSelected,isChild){
+             debugger;
                 console.log(objectName);
                  {!typeofConfig}SelectedData = [];
                         for (var i = 0; i < configJsonData{!typeofConfig}.data.length; i++) {
@@ -241,6 +246,7 @@
                   
             }
         function CleanConfigurationsCompleted(){
+             debugger;
                 hideLoader();
          	toastr.success('Batch is initiated. Email notification will be sent to you soon.');
          	}

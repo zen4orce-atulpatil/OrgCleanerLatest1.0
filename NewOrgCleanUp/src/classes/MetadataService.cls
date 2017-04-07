@@ -10378,19 +10378,31 @@ public class MetadataService {
             MetadataService.deleteMetadataResponse_element response_x;
             Map<String, MetadataService.deleteMetadataResponse_element> response_map_x = new Map<String, MetadataService.deleteMetadataResponse_element>();
             response_map_x.put('response_x', response_x);
-            WebServiceCallout.invoke(
-              this,
-              request_x,
-              response_map_x,
-              new String[]{endpoint_x,
-              '',
-              'http://soap.sforce.com/2006/04/metadata',
-              'deleteMetadata',
-              'http://soap.sforce.com/2006/04/metadata',
-              'deleteMetadataResponse',
-              'MetadataService.deleteMetadataResponse_element'}
-            );
-            response_x  = response_map_x.get('response_x');
+        	try{
+            	system.debug('****************deleteMetadata try************');
+            	WebServiceCallout.invoke(
+              	this,
+              	request_x,
+              	response_map_x,
+              	new String[]{endpoint_x,
+              	'',
+              	'http://soap.sforce.com/2006/04/metadata',
+              	'deleteMetadata',
+              	'http://soap.sforce.com/2006/04/metadata',
+              	'deleteMetadataResponse',
+              	'MetadataService.deleteMetadataResponse_element'}
+            	);
+            }
+            catch(exception e){
+            	system.debug('****************deleteMetadata catch************'+e.getMessage());
+            }
+            if( response_map_x.containsKey('response_x')){
+            	
+            	response_x  = response_map_x.get('response_x');
+            	system.debug('****************deleteMetadata response_x************'+response_x.result);
+            	
+            }
+            
             return response_x.result;
         }
         public MetadataService.SaveResult renameMetadata(String type_x,String oldFullName,String newFullName) {
