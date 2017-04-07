@@ -1,0 +1,107 @@
+<apex:page controller="DataCleanUpService" showHeader="false" sidebar="false" standardStylesheets="false">
+    <apex:includeScript value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/js/jquery.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/js/bootstrap.min.js')}" />
+	<apex:includescript value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/js/jquery.dataTables.js')}" />
+    <apex:includescript value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/js/toastr.js')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/css/jquery.dataTables.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/css/bootstrap-theme.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/css/bootstrap.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/css/toastr.css')}" />    
+    <apex:stylesheet value="{!URLFOR($Resource.ConfigCleanUpJS, 'files/css/custom.css')}" />
+    <apex:form >
+        <apex:actionFunction name="Dashboard" action="{!Dashboard}">     
+	 	</apex:actionFunction>   
+	 	<apex:actionFunction name="GetStandardData" action="{!GetConfigDetails}" rerender="renderStandardData" oncomplete="GetDetailsOnCompleted();">     
+    		<apex:param id="CurrentStandardData" name="CurrentConfig"  assignTo="{!CurrentConfig}" value="" />
+	 	</apex:actionFunction>
+	 	<apex:actionFunction name="GetCustomData" action="{!GetConfigDetails}" rerender="renderCustomData" oncomplete="GetDetailsOnCompleted();">     
+    		<apex:param id="CurrentCustomData" name="CurrentConfig"  assignTo="{!CurrentConfig}" value="" />
+	 	</apex:actionFunction>
+	 	
+    </apex:form>
+      <style>
+        ::selection { background: #52d280; }
+        </style>
+       <script>
+        j$ = jQuery.noConflict();
+        function hideLoader(){
+        	j$(".loaderWrap").hide();
+        }
+         function showLoader(){
+        	j$(".loaderWrap").show();
+        }
+        function GetDetailsOnCompleted(){
+            hideLoader();
+        }
+        j$(document).ready(function(){
+        hideLoader();
+            j$('.panel-group').on('hidden.bs.collapse', toggleIcon);
+    		j$('.panel-group').on('shown.bs.collapse', toggleIcon);
+            
+            j$(".panelOpener").click(function(){
+                if(j$(this).attr('class').indexOf('collapsed') >= 0){
+                    showLoader();
+                	console.log('opened');
+                    if(j$(this).attr('area') == 'StandardData'){
+                    	GetStandardData('StandardData');
+                    }
+                
+                    if(j$(this).attr('area') == 'CustomData'){
+                    	GetCustomData('CustomData');
+                    }
+                }
+            });
+        });
+        function toggleIcon(e) {
+            debugger;
+        j$(e.target).prev('.panel-heading').find(".more-less").toggleClass('glyphicon-plus glyphicon-minus');
+    }
+        </script>
+        <div class="header">Org Cleaner&nbsp;<span class="miniheader">by Zen4orce</span></div>
+         <a onclick="Dashboard();">HOME</a>
+        <div class="container demo">
+
+	
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		<div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingOne">
+				<h4 class="panel-title">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed panelOpener" area="StandardData">
+						<i class="more-less glyphicon glyphicon-plus"></i>
+						Standard Data CleanUp
+					</a>
+				</h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+				<div class="panel-body">
+                  <apex:outPutPanel id="renderStandardData">
+					     <c:DataCleanUp typeofConfig="StandardData" header1="Standard Objects" header2="Selected Objects"  icon1="glyphicon glyphicon-wrench" rendered="{!IsStandardData}" jsonData="{!standardDataJson}"/>
+                    </apex:outPutPanel>                 
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingTwo">
+				<h4 class="panel-title">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="collapsed panelOpener" area="CustomData">
+						<i class="more-less glyphicon glyphicon-plus"></i>
+						Custom Data CleanUp
+					</a>
+				</h4>
+			</div>
+			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				<div class="panel-body">
+                  <apex:outPutPanel id="renderCustomData">
+					    <c:DataCleanUp typeofConfig="CustomData" header1="Custom Objects" header2="Selected Objects"  icon1="glyphicon glyphicon-wrench" rendered="{!IsCustomData}" jsonData="{!customDataJson}"/>
+                    </apex:outPutPanel>                 
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+		
+       <c:loader ></c:loader> 
+</apex:page>

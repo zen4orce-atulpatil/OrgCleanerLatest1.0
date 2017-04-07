@@ -1,0 +1,1 @@
+trigger TestAccount8 on Account (before insert) {}

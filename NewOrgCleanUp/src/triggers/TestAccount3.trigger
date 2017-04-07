@@ -1,0 +1,1 @@
+trigger TestAccount3 on Account (before insert) {}
