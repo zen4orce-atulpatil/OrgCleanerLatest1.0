@@ -8,6 +8,10 @@
     
     <apex:form >
             <script>
+        window.$Label = window.$Label || {};
+    	$Label.No_Object = '{!JSENCODE($Label.No_Object)}';
+        
+        
             j$ = jQuery.noConflict();
              var configType = '{!typeofConfig}';
         debugger;
@@ -120,7 +124,7 @@
     			}
     			else{
                     hideLoader();
-                     toastr.error('No {!typeofConfig} selected');
+                     toastr.error(configType+' '+$Label.No_Object);
     			}
 			}
    		
@@ -129,24 +133,30 @@
   				 var tableRow = j$(this).closest('tr');
                  var selectedData = {!typeofConfig}PreviewTable.row(tableRow).data();
                 loadSelected{!typeofConfig}Table(selectedData.name,this.checked,true);
-                toastr.success(selectedData.name + ' trigger added in Selected Triggers section');
+            //toastr.success(selectedData.name + ' triggers added in Selected Triggers section');
+            toastr.success(selectedData.name +' '+configType+ ' '+'added in Selected'+' '+configType+ ' '+'section');    ////atul (10-April-2017)
+            	$(".{!typeofConfig}Individualobject").unbind( "click" ); //atul (10-April-2017)
 			});
         j$(document).delegate("#{!typeofConfig}ObjectTable .selective", "click", function() {
              debugger;
                 var tableRow = j$(this).closest('tr');
                 var selectedData = {!typeofConfig}ObjTable.row(tableRow).data();
                 loadChildTable{!typeofConfig}(selectedData.name);
-                toastr.info(selectedData.name + ' triggers will be displayed in Triggers section');
+            //toastr.info(selectedData.name + ' triggers will be displayed in Triggers section');
+            toastr.info(selectedData.name+' '+configType+ ' '+'will be displayed in Triggers section');//atul (10-April-2017)
+            	$("#{!typeofConfig}ObjectTable .selective").unbind( "click" ); //atul (10-April-2017)
 			});
         j$(document).delegate("#{!typeofConfig}ObjectTable .object{!typeofConfig}", "click", function() {
              debugger;
-                var tableRow = j$(this).closest('tr');
+           		var tableRow = j$(this).closest('tr');
                 var isSelected = this.checked;
                 var selectedData = {!typeofConfig}ObjTable.row(tableRow).data();
                 loadSelected{!typeofConfig}Table(selectedData.name,isSelected,false);
-                if(isSelected){
-                toastr.success(selectedData.name + ' triggers added in Selected Triggers section');
+                if(isSelected){															//atul (10-April-2017)
+                toastr.success(selectedData.name+' '+configType+ ' '+'added in Selected '+' '+configType+ ' '+'section');  //atul (10-April-2017)
+                    
                 }
+            $( "#{!typeofConfig}ObjectTable .object{!typeofConfig}").unbind( "click" ); //atul (10-April-2017)
 			});
         
         

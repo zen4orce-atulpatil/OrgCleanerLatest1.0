@@ -86,7 +86,7 @@
     			}
     			else{
                     hideLoader();
-    				toastr.error('No triggers selected');
+    				toastr.error(configType+' '+$Label.No_Object);
     			}
 			}
           
@@ -99,9 +99,11 @@
                 var isSelected = this.checked;
                 var selectedData = {!typeofConfig}PreviewTable.row(tableRow).data();
                 loadSelected{!typeofConfig}Table(selectedData.name,isSelected);
-                if(isSelected){
-                toastr.success(selectedData.name + ' triggers added in Selected Triggers section');
+                if(isSelected){																	//atul (10-April-2017)
+                    //toastr.success(selectedData.name + ' triggers added in Selected Triggers section');
+                     toastr.success(selectedData.name+' '+configType+ ' '+'added in Selected'+' '+configType+ ' '+'section');
                 }
+                 $( "#{!typeofConfig}byObjectDTTable .object{!typeofConfig}").unbind( "click" );//atul (10-April-2017)
 			});
            j$(document).ready(function () {
                
